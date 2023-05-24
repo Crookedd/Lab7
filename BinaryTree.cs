@@ -94,5 +94,81 @@ namespace Lab7
                 }
             }
         }
+
+        //Метод для прямого обхода дерева
+        public IEnumerable<T> Preorder()
+        {
+            if (root == null)
+                yield break;
+
+            var stack = new Stack<BinaryTreeNode<T>>();
+            stack.Push(root);
+
+            while (stack.Count > 0)
+            {
+                var node = stack.Pop();
+                yield return node.Value;
+                if (node.Right != null)
+                    stack.Push(node.Right);
+                if (node.Left != null)
+                    stack.Push(node.Left);
+            }
+        }
+
+        //Метод для обратного обхода дерева
+        public IEnumerable<T> Postorder()
+        {
+            if (root == null)
+                yield break;
+
+            var stack = new Stack<BinaryTreeNode<T>>();
+            var node = root;
+
+            while (stack.Count > 0 || node != null)
+            {
+                if (node == null)
+                {
+                    node = stack.Pop();
+                    if (stack.Count > 0 && node.Right == stack.Peek())
+                    {
+                        stack.Pop();
+                        stack.Push(node);
+                        node = node.Right;
+                    }
+                    else
+                    {
+                        yield return node.Value;
+                        node = null;
+                    }
+                }
+                else
+                {
+                    if (node.Right != null)
+                        stack.Push(node.Right);
+                    stack.Push(node);
+                    node = node.Left;
+                }
+            }
+        }
+
+        //Метод для обхода дерева в ширину
+        public IEnumerable<T> Levelorder()
+        {
+            if (root == null)
+                yield break;
+
+            var queue = new Queue<BinaryTreeNode<T>>();
+            queue.Enqueue(root);
+
+            while (queue.Count > 0)
+            {
+                var node = queue.Dequeue();
+                yield return node.Value;
+                if (node.Left != null)
+                    queue.Enqueue(node.Left);
+                if (node.Right != null)
+                    queue.Enqueue(node.Right);
+            }
+        }
     }
 }
