@@ -154,31 +154,6 @@ namespace Lab7
             }
         }
 
-        // Метод для центрального обхода дерева
-       /* public IEnumerable<T> InOrderTraversal()
-        {
-            if (root == null)
-                yield break;
-
-            var stack = new Stack<BinaryTreeNode<T>>();
-            var node = root;
-
-            while (stack.Count > 0 || node != null)
-            {
-                if (node == null)
-                {
-                    node = stack.Pop();
-                    yield return node.Value;
-                    node = node.Right;
-                }
-                else
-                {
-                    stack.Push(node);
-                    node = node.Left;
-                }
-            }
-        }*/
-
         //Метод для прямого обхода дерева
         public IEnumerable<T> Preorder()
         {
