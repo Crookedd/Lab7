@@ -20,6 +20,8 @@ namespace Lab7
                 Console.WriteLine("Adding {0}", value);
                 integerTree.Add(value);
             }
+
+
             Console.WriteLine("Preorder traversal:");
             Console.WriteLine(string.Join(" ", integerTree.Preorder()));
             Console.WriteLine("Postorder traversal:");
@@ -27,8 +29,9 @@ namespace Lab7
             Console.WriteLine("Levelorder traversal:");
             Console.WriteLine(string.Join(" ", integerTree.Levelorder()));
             Console.WriteLine("Inorder traversal:");
-            foreach (int value in integerTree)
-                Console.Write("{0} ", value);
+            Console.WriteLine(string.Join(" ", integerTree.InOrderTraversal()));
+            /* foreach (int value in integerTree)
+                 Console.Write("{0} ", value);*/
             Console.WriteLine();
             Console.ReadKey(true);
         }

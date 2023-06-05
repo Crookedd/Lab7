@@ -7,62 +7,64 @@ using System.Threading.Tasks;
 
 namespace Lab7
 {
-    public class BinaryTreeNode<T>
+    public class BinaryTreeNode<T> where T : IComparable<T>
     {
         public T Value { get; set; }
         public BinaryTreeNode<T> Left { get; set; }
         public BinaryTreeNode<T> Right { get; set; }
-    }
-
-    // Обобщенный класс-коллекция для бинарного дерева
-    public class BinaryTree<T> : IEnumerable<T>
-    {
-        private BinaryTreeNode<T> root;
+        public BinaryTreeNode(T value)
+        {
+            Value = value;
+        }
 
         public void Add(T value)
         {
-            var newNode = new BinaryTreeNode<T> { Value = value };
+            if (value.CompareTo(Value) < 0)
+            {
+                if (Left == null)
+                {
+                    Left = new BinaryTreeNode<T>(value);
+                }
+                else
+                {
+                    Left.Add(value);
+                }
+            }
+            else
+            {
+                if (Right == null)
+                {
+                    Right = new BinaryTreeNode<T>(value);
+                }
+                else
+                {
+                    Right.Add(value);
+                }
+            }
+        }
+    }
 
+
+    // Обобщенный класс-коллекция для бинарного дерева
+    public class BinaryTree<T> : IEnumerable<T> where T : IComparable<T>
+    {
+        public BinaryTreeNode<T> root;
+
+        public void Add(T value)
+        {
             if (root == null)
             {
-                root = newNode;
+                root = new BinaryTreeNode<T>(value);
             }
             else
             {
-                AddTo(root, newNode);
+                root.Add(value);
             }
         }
 
-        private void AddTo(BinaryTreeNode<T> node, BinaryTreeNode<T> newNode)
-        {
-            if (Comparer<T>.Default.Compare(newNode.Value, node.Value) < 0)
-            {
-                if (node.Left == null)
-                {
-                    node.Left = newNode;
-                }
-                else
-                {
-                    AddTo(node.Left, newNode);
-                }
-            }
-            else
-            {
-                if (node.Right == null)
-                {
-                    node.Right = newNode;
-                }
-                else
-                {
-                    AddTo(node.Right, newNode);
-                }
-            }
-        }
-
-        // Реализация интерфейса IEnumerable<T>
         public IEnumerator<T> GetEnumerator()
         {
-            return InOrderTraversal().GetEnumerator();
+            return new BinaryTreeEnumerator<T>(root);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -70,8 +72,66 @@ namespace Lab7
             return GetEnumerator();
         }
 
+        private class BinaryTreeEnumerator<T> : IEnumerator<T> where T : IComparable<T>
+        {
+            private BinaryTreeNode<T> root;
+            private Stack<BinaryTreeNode<T>> stack;
+
+            public BinaryTreeEnumerator(BinaryTreeNode<T> root)
+            {
+                this.root = root;
+                stack = new Stack<BinaryTreeNode<T>>();
+            }
+
+            public bool MoveNext()
+            {
+                if (stack.Count == 0 && root != null)
+                {
+                    BinaryTreeNode<T> current = root;
+                    while (current != null)
+                    {
+                        stack.Push(current);
+                        current = current.Left;
+                    }
+                }
+                else if (stack.Count > 0 && stack.Peek().Right != null)
+                {
+                    BinaryTreeNode<T> current = stack.Peek().Right;
+                    while (current != null)
+                    {
+                        stack.Push(current);
+                        current = current.Left;
+                    }
+                }
+                else
+                {
+                    stack.Pop();
+                }
+                return stack.Count > 0;
+            }
+
+            public void Reset()
+            {
+                stack.Clear();
+            }
+
+            public T Current
+            {
+                get { return stack.Peek().Value; }
+            }
+
+            object IEnumerator.Current
+            {
+                get { return Current; }
+            }
+
+            public void Dispose()
+            {
+            }
+        }
+
         // Метод для центрального обхода дерева
-        private IEnumerable<T> InOrderTraversal()
+        public IEnumerable<T> InOrderTraversal()
         {
             if (root == null)
                 yield break;
