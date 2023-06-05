@@ -72,6 +72,30 @@ namespace Lab7
             return GetEnumerator();
         }
 
+        public IEnumerable<T> InOrderTravesal()
+        {
+            return InOrderTravesal(root);
+        }
+
+        public IEnumerable<T> InOrderTravesal(BinaryTreeNode<T> node)
+        {
+            if (node.Left != null)
+            {
+                foreach (T value in InOrderTravesal(node.Left))
+                {
+                    yield return value;
+                }
+            }
+            yield return node.Value;
+            if (node.Right != null)
+            {
+                foreach (T value in InOrderTravesal(node.Right))
+                {
+                    yield return value;
+                }
+            }
+        }
+
         private class BinaryTreeEnumerator<T> : IEnumerator<T> where T : IComparable<T>
         {
             private BinaryTreeNode<T> root;
@@ -131,7 +155,7 @@ namespace Lab7
         }
 
         // Метод для центрального обхода дерева
-        public IEnumerable<T> InOrderTraversal()
+       /* public IEnumerable<T> InOrderTraversal()
         {
             if (root == null)
                 yield break;
@@ -153,7 +177,7 @@ namespace Lab7
                     node = node.Left;
                 }
             }
-        }
+        }*/
 
         //Метод для прямого обхода дерева
         public IEnumerable<T> Preorder()
@@ -231,4 +255,5 @@ namespace Lab7
             }
         }
     }
+
 }

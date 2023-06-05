@@ -29,7 +29,7 @@ namespace Lab7
             Console.WriteLine("Levelorder traversal:");
             Console.WriteLine(string.Join(" ", integerTree.Levelorder()));
             Console.WriteLine("Inorder traversal:");
-            Console.WriteLine(string.Join(" ", integerTree.InOrderTraversal()));
+            Console.WriteLine(string.Join(" ", integerTree.InOrderTravesal()));
             /* foreach (int value in integerTree)
                  Console.Write("{0} ", value);*/
             Console.WriteLine();
